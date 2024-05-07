@@ -1,0 +1,41 @@
+/* Tailwind base setup */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/*  Custom color definitions to be applied globally */
+:root {
+    --text-color-hex: #000000;
+    --header-color: #fd7e2f;
+
+    --sub-header-color-start-hex: #ff7403;
+    --sub-header-color-end-hex: #ffa155;
+
+    --background-color: #fffefa;
+    --background-end-hex: #fffefa;
+}
+
+/* Applying styles to the body to ensure correct color */
+body {
+    color: var(--text-color-hex); /* This should make text white */
+    background-color: var(--background-color); /* Setting background color */
+}
+
+@layer utilities {
+    /*The @layer utilities directive in Tailwind CSS is used to define custom utility classes or override existing ones. It categorizes CSS rules into specific groups to help with customization and conflict resolution. */
+    .text-balance {
+        text-wrap: balance;
+    }
+    .header-text {
+        color: var(--header-color);
+    }
+    .gradient-text-sub {
+        background: linear-gradient(
+            to right,
+            var(--sub-header-color-start-hex),
+            var(--sub-header-color-end-hex)
+        );
+        -webkit-background-clip: text; /* Clip background to text (for WebKit browsers) */
+        background-clip: text; /* Standard clipping to text */
+        -webkit-text-fill-color: transparent; /* Make text transparent to show gradient */
+    }
+}
