@@ -1,0 +1,39 @@
+{
+    "images": [
+        {
+            "id": 1,
+            "title": "Hamros",
+            "description": "Hamros restaurant",
+            "src": "/hamros.png",
+            "alt": "Hamros restaurant"
+        },
+        {
+            "id": 2,
+            "title": "Hamros",
+            "description": "Hamros restaurant",
+            "src": "/rest2.png",
+            "alt": "Hamros restaurant"
+        },
+        {
+            "id": 3,
+            "title": "Hamros",
+            "description": "Hamros restaurant",
+            "src": "/facebook.png",
+            "alt": "Hamros restaurant"
+        },
+        {
+            "id": 4,
+            "title": "Hamros",
+            "description": "Hamros restaurant",
+            "src": "/mcdonald.png",
+            "alt": "Hamros restaurant"
+        },
+        {
+            "id": 5,
+            "title": "Hamros",
+            "description": "Hamros restaurant",
+            "src": "/popeyes.png",
+            "alt": "Hamros restaurant"
+        }
+    ]
+}
