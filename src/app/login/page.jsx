@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
 export default function Login() {
     // State to manage form input values
@@ -19,38 +20,51 @@ export default function Login() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center pt-40">
+        <div className="flex flex-col items-center justify-center pt-60">
             {/* Add a shadow, padding, and border radius */}
             <div className="bg-white p-10 rounded-lg shadow-lg">
-                <h1 className="text-6xl font-medium p-5">Login</h1>
+                <div className="flex justify-center items-center">
+                    <Image
+                        className="mr-5"
+                        src={`/Designer.png`}
+                        width="100"
+                        height="100"
+                        alt="Logo"
+                    />
+                </div>
                 <form onSubmit={handleLogin}>
-                    <div style={{ marginBottom: "15px" }}>
+                    <div className="mb-15 text-xl p-5">
                         <label htmlFor="email">Email:</label>
                         <input
                             type="email"
                             id="email"
+                            className="border p-2 border-gray-800 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
                             required
-                            style={{ width: "100%" }}
                         />
                     </div>
-                    <div style={{ marginBottom: "15px" }}>
+                    <div className="mb-15 text-xl p-5">
                         <label htmlFor="password">Password:</label>
                         <input
                             type="password"
                             id="password"
+                            className="border p-2 border-gray-800 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
                             required
-                            style={{ width: "100%" }}
                         />
                     </div>
-                    <button type="submit" style={{ padding: "10px 20px" }}>
-                        Login
-                    </button>
+                    <div className="mb-15 text-xl p-5">
+                        <button
+                            className="bg-customButton py-2 px-40 font-bold text-white text-xl rounded-lg"
+                            type="submit"
+                        >
+                            Login
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
