@@ -19,7 +19,7 @@ export default function Home() {
                     />
                 </div>
             </div>
-            <div className="flex flex-col ml-60 mr-60">
+            {/* <div className="flex flex-col ml-60 mr-60">
                 <h1 className="text-4xl font-bold header-text-sub">What we do</h1>
                 <p className="">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem totam
@@ -37,7 +37,7 @@ export default function Home() {
                     possimus sunt nemo cupiditate earum, fuga necessitatibus facere
                     excepturi expedita laudantium! Velit rem earum adipisci vitae. Eaque.
                 </p>
-            </div>
+            </div> */}
         </div>
     );
 }

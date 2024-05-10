@@ -1,27 +1,37 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { signup } from "@/api/auth";
+import { toast, ToastContainer } from "react-toastify"; // Import toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for toast styling
 
-export default function Login() {
+export default function SignUp() {
     // State to manage form input values
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
-    // Function to handle form submission
-    const handleLogin = (e) => {
-        e.preventDefault();
-        // Here you would typically send the form data to an API for authentication
-        console.log("Email:", email);
-        console.log("Password:", password);
-
-        // Reset the form fields (optional)
-        setEmail("");
-        setPassword("");
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault(); // Prevents the default action (refreshing the page) from happening
+            const userInfo = {
+                name: username,
+                email: email,
+                password: password,
+            };
+            const result = await signup(userInfo);
+            console.log(result);
+            toast.success("Signed up succesfully!", { position: "bottom-right" });
+        } catch (error) {
+            toast.error(error.message, { position: "bottom-right" });
+            console.log(error.message);
+        }
     };
 
     return (
         <div className="flex flex-col items-center justify-center pt-60">
+            <ToastContainer />
             {/* Add a shadow, padding, and border radius */}
             <div className="bg-white p-10 rounded-lg shadow-lg">
                 <div className="flex justify-center items-center">
@@ -33,7 +43,19 @@ export default function Login() {
                         alt="Logo"
                     />
                 </div>
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-15 text-xl p-5">
+                        <label htmlFor="username">Username:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            className="border p-2 border-gray-800 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)} // Change it as the user changes it in the form
+                            placeholder="Enter your username" // Placeholder text
+                            required // Make all of these fields required
+                        />
+                    </div>
                     <div className="mb-15 text-xl p-5">
                         <label htmlFor="email">Email:</label>
                         <input
@@ -60,22 +82,13 @@ export default function Login() {
                     </div>
                     <div className="mb-15 text-xl p-5">
                         <button
-                            className="bg-customButton py-2 px-40 font-bold text-white text-xl rounded-lg hover:bg-blue-700"
+                            className="bg-customButton py-2 px-40 font-bold text-white text-xl rounded-lg"
                             type="submit"
                         >
-                            Login
+                            Sign Up
                         </button>
                     </div>
                 </form>
-                <div className="text-center">
-                    <Link href="/sign-up">
-                        {" "}
-                        {/* If they don't have an account link them to the sign up page instead */}
-                        <button className="hover:text-blue-700">
-                            Don't have an account? Sign up here.
-                        </button>
-                    </Link>
-                </div>
             </div>
         </div>
     );

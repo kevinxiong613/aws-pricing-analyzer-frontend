@@ -4,7 +4,7 @@ import "../app/styles/globals.css";
 
 const Header = () => {
     return (
-        <div className="flex items-center justify-between bg-customWhiteHeader px-4 py-1 fixed top-0 left-0 w-full z-50 shadow-lg">
+        <div className="flex items-center justify-between bg-customWhiteHeader px-4 fixed top-0 left-0 w-full z-50 shadow-lg">
             <div className="ml-60">
                 {/* Create space on left without letting it be the button*/}
                 <Link href="/">
@@ -35,9 +35,9 @@ const Header = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/contact-us">
+                        <Link href="/dashboard">
                             <p className="hover:text-gray-300 py-3 px-5 text-xl">
-                                Contact Us
+                                Dashboard
                             </p>
                         </Link>
                     </li>

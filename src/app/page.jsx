@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import "../app/styles/globals.css";
 import Home from "../components/Home.jsx";
