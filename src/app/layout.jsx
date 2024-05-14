@@ -1,7 +1,6 @@
 import { Inter, Newsreader } from "next/font/google";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
-
 const inter = Inter({
     subsets: ["latin"], // Include Latin characters
     weights: ["400", "700"], // Include regular and bold weights
@@ -21,7 +20,6 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body className={`${inter.className}`}>
-                <Header />
                 <main>{children}</main>
             </body>
         </html>
