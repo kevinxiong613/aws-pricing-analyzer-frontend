@@ -15,16 +15,21 @@ export default function Dashboard() {
             console.log("jwtToken " + jwtToken);
             try {
                 const verified = await verifyUser(jwtToken);
+                if (!verified) {
+                    router.push("/login");
+                }
             } catch (error) {
                 console.error(error);
-            }
-            if (!verified) {
-                router.push("/login");
+                router.push("/login"); // If there is an error verifying their token don't want them on this page
             }
         };
 
         verifyToken();
-    }, [router]);
+    }, []);
 
-    return <div></div>;
+    return (
+        <div>
+            <h1>YOU MADE IT</h1>
+        </div>
+    );
 }

@@ -2,26 +2,40 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { login } from "@/api/auth";
+import { toast, ToastContainer } from "react-toastify"; // Import toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for toast styling
+import { useRouter } from "next/navigation"; // Redirect to dashboard page
 
 export default function Login() {
     // State to manage form input values
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter();
 
-    // Function to handle form submission
-    const handleLogin = (e) => {
-        e.preventDefault();
-        // Here you would typically send the form data to an API for authentication
-        console.log("Email:", email);
-        console.log("Password:", password);
-
-        // Reset the form fields (optional)
-        setEmail("");
-        setPassword("");
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault(); // Prevents the default action (refreshing the page) from happening
+            const userInfo = {
+                email: email,
+                password: password,
+            };
+            const result = await login(userInfo);
+            console.log(result);
+            const token = result.token;
+            toast.success("Logged in succesfully!", { position: "bottom-right" }); // Make the toast notification messages appear on the bottom right
+            localStorage.setItem("token", token); // Set the local storage to contain the token
+            // Redirect to the dashboard route
+            router.push("/dashboard");
+        } catch (error) {
+            toast.error(error.message, { position: "bottom-right" });
+            console.log(error.message);
+        }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center pt-60">
+        <div className="flex items-center justify-center min-h-screen">
+            <ToastContainer />
             {/* Add a shadow, padding, and border radius */}
             <div className="bg-white p-10 rounded-lg shadow-lg">
                 <div className="flex justify-center items-center">
@@ -33,7 +47,7 @@ export default function Login() {
                         alt="Logo"
                     />
                 </div>
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleSubmit}>
                     <div className="mb-15 text-xl p-5">
                         <label htmlFor="email">Email:</label>
                         <input
@@ -60,7 +74,7 @@ export default function Login() {
                     </div>
                     <div className="mb-15 text-xl p-5">
                         <button
-                            className="bg-customButton py-2 px-40 font-bold text-white text-xl rounded-lg hover:bg-blue-700"
+                            className="bg-customButton py-2 px-40 font-bold text-white text-xl rounded-lg"
                             type="submit"
                         >
                             Login
