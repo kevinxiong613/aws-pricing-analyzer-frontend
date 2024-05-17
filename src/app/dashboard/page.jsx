@@ -2,8 +2,10 @@
 import React, { useEffect } from "react";
 import { verifyUser } from "@/api/auth";
 import { useRouter } from "next/navigation"; // Redirect to dashboard page
+import Header from "@/components/Header";
+import Dashboard from "@/components/Dashboard";
 
-export default function Dashboard() {
+export default function dashboard() {
     const router = useRouter();
 
     useEffect(() => {
@@ -12,7 +14,6 @@ export default function Dashboard() {
                 /* Need to have this async function in here, can't directly put async function as parameter of useEffect since it expects a "cleanup" function */
             }
             const jwtToken = localStorage.getItem("token");
-            console.log("jwtToken " + jwtToken);
             try {
                 const verified = await verifyUser(jwtToken);
                 if (!verified) {
@@ -28,8 +29,9 @@ export default function Dashboard() {
     }, []);
 
     return (
-        <div>
-            <h1>YOU MADE IT</h1>
-        </div>
+        <>
+            <Header />
+            <Dashboard />
+        </>
     );
 }

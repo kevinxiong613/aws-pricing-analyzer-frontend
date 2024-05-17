@@ -41,13 +41,3 @@ export const login = async (userInfo) => {
     const parseResult = await response.data;
     return parseResult;
 };
-
-export function setTokenCookie(res, token) {
-    const cookie = serialize("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        path: "/", // Set the cookie path
-        sameSite: "strict",
-    });
-    res.setHeader("Set-Cookie", cookie);
-}
