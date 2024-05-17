@@ -1,8 +1,19 @@
+"use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "../app/styles/globals.css";
 
 const Header = () => {
+    const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        setToken(localStorage.getItem("token"));
+    }, []); // Get the token to see if we should render this with login or logout button
+    const handleLogout = () => {
+        localStorage.removeItem("token"); // Remove from local storage to be null
+        setToken(localStorage.getItem("token"));
+    };
     return (
         <div className="flex items-center justify-between bg-customWhiteHeader px-4 fixed top-0 left-0 w-full z-50 shadow-lg">
             <div className="ml-4 md:ml-8">
@@ -41,15 +52,23 @@ const Header = () => {
                             </p>
                         </Link>
                     </li>
-                    <li>
-                        <Link href="/login">
-                            {" "}
-                            {/* md means size 768 and above should apply the tag, otherwise don't*/}
-                            <p className="bg-customButton text-white py-2 px-4 font-bold rounded hover:bg-blue-700 transition-colors text-center">
-                                Login
-                            </p>
-                        </Link>
-                    </li>
+                    {token ? (
+                        <li>
+                            <Link href="/" onClick={handleLogout}>
+                                <p className="bg-customButton text-white py-2 px-4 font-bold rounded hover:bg-blue-700 transition-colors text-center cursor-pointer">
+                                    Logout
+                                </p>
+                            </Link>
+                        </li>
+                    ) : (
+                        <li>
+                            <Link href="/login">
+                                <p className="bg-customButton text-white py-2 px-4 font-bold rounded hover:bg-blue-700 transition-colors text-center">
+                                    Login
+                                </p>
+                            </Link>
+                        </li>
+                    )}
                 </ul>
             </div>
         </div>
