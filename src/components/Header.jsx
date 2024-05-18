@@ -22,14 +22,14 @@ const Header = () => {
                     <div className="flex items-center h-full py-1">
                         {/* Uncomment Image if needed */}
                         <Image
-                            className="mr-2 md:mr-4"
+                            className="mr-1 md:mr-2 rounded-lg"
                             src={`/Designer.png`}
                             width="50"
                             height="50"
                             alt="Logo"
                         />
-                        <h1 className="text-4xl md:text-4xl header-text font-medium font-newsreader mt-2">
-                            Nimbus
+                        <h1 className="text-4xl md:text-4xl text-customText font-medium font-newsreader mt-2">
+                            Munchka
                         </h1>
                     </div>
                 </Link>

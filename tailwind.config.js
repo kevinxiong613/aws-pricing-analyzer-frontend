@@ -20,7 +20,8 @@ module.exports = {
             },
             colors: {
                 customWhiteHeader: "#fffefa", // Your specific hex color
-                customButton: "#fd7e2f",
+                customButton: "#006898",
+                customText: "#006898",
             },
         },
     },

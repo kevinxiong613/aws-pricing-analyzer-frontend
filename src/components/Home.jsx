@@ -7,7 +7,7 @@ export default function Home() {
         <div>
             <div className="flex flex-col items-center justify-center pt-40">
                 <h1 className="text-6xl font-newsreader p-5">
-                    Grow and scale your business with AWS
+                    Don't let those leftovers go to waste!
                 </h1>
                 <div className="flex items-center mb-40">
                     <Image
