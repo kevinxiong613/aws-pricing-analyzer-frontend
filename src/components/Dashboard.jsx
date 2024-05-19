@@ -2,20 +2,9 @@
 import React, { useEffect } from "react";
 import "../app/styles/globals.css";
 import Image from "next/image";
-import { getAWS } from "@/api/aws";
 
 export default function Dashboard() {
-    useEffect(() => {
-        const getInfo = async () => {
-            try {
-                const awsInfo = await getAWS();
-                console.log(awsInfo);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getInfo();
-    }, []);
+    useEffect(() => {}, []);
     return (
         <div className="min-h-screen bg-customWhiteHeader flex flex-col items-center mt-10">
             <div className="flex flex-col items-center justify-center pt-10">

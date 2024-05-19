@@ -39,9 +39,9 @@ const Header = () => {
                     {" "}
                     {/* Reduced spacing */}
                     <li>
-                        <Link href="/about-us">
+                        <Link href="/search">
                             <p className="hover:text-gray-300 py-2 md:py-3 px-3 md:px-5">
-                                About Us
+                                Search
                             </p>
                         </Link>
                     </li>
