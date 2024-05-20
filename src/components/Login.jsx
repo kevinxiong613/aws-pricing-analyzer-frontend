@@ -21,7 +21,6 @@ export default function Login() {
                 password: password,
             };
             const result = await login(userInfo);
-            console.log(result);
             const token = result.token;
             toast.success("Logged in succesfully!", { position: "bottom-right" }); // Make the toast notification messages appear on the bottom right
             localStorage.setItem("token", token); // Set the local storage to contain the token

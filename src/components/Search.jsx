@@ -30,33 +30,41 @@ export default function Dashboard() {
     //     getRecipe();
     // }, []);
     return (
-        <div className="flex justify-center">
-            {" "}
-            {/* Center horizontally */}
-            <div className="center mt-20 justify-center">
-                <div className="mb-6">
-                    <input
-                        type="text"
-                        value={ingredient}
-                        onChange={handleIngredientChange}
-                        placeholder="Enter Ingredient"
-                        className="px-4 py-2 mr-2 border border-gray-300 rounded-lg"
-                    />
-                    <button
-                        onClick={handleIngredientAdd}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                    >
-                        Add
-                    </button>
+        <div className="flex flex-col items-center mt-20">
+            <div className="mb-6">
+                <input
+                    type="text"
+                    value={ingredient}
+                    onChange={handleIngredientChange}
+                    placeholder="Enter Ingredient"
+                    className="px-4 py-2 mr-10 border border-gray-300 rounded-lg"
+                />
+                <button
+                    onClick={handleIngredientAdd}
+                    className="px-4 py-2 bg-customText text-white rounded-lg hover:bg-blue-600"
+                >
+                    Add
+                </button>
+            </div>
+            <div className="flex justify-center w-full mt-8">
+                <div className="w-1/4 p-4">
+                    <h2 className="text-2xl font-bold mb-4">Current Ingredients:</h2>
+                    <ul className="list-disc ml-8">
+                        {prompt.map((ingredient, index) => (
+                            <li key={index} className="text-lg">
+                                {ingredient}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-                <h1 className="text-2xl font-bold mb-4">Current Ingredients:</h1>
-                <ul className="list-disc ml-8">
-                    {prompt.map((ingredient, index) => (
-                        <li key={index} className="text-lg">
-                            {ingredient}
-                        </li>
-                    ))}
-                </ul>
+                <div className="w-3/4 p-4">
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus
+                        repellendus aut repellat ut exercitationem aliquid corporis eius
+                        nam quo eveniet, qui et ex commodi ducimus est quam obcaecati
+                        nesciunt nemo?
+                    </p>
+                </div>
             </div>
         </div>
     );

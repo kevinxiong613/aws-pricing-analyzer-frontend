@@ -18,11 +18,14 @@ export default function dashboard() {
             try {
                 const verified = await verifyUser(jwtToken);
                 if (!verified) {
+                    localStorage.removeItem("token");
                     router.push("/login");
+                } else {
+                    setVerified(true);
                 }
-                setVerified(true);
             } catch (error) {
                 console.error(error);
+                localStorage.removeItem("token");
                 router.push("/login"); // If there is an error verifying their token don't want them on this page
             }
         };
