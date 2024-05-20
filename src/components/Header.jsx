@@ -23,9 +23,10 @@ const Header = () => {
         localStorage.removeItem("token"); // Remove from local storage to be null
         setToken(null);
     };
+
     return (
         <div className="flex items-center justify-between bg-customWhiteHeader px-4 fixed top-0 left-0 w-full z-50 shadow-lg">
-            <div className="ml-4 md:ml-8">
+            <div>
                 {/* Create space on left without letting it be the button*/}
                 <Link href="/">
                     <div className="flex items-center h-full py-1">
@@ -43,10 +44,9 @@ const Header = () => {
                     </div>
                 </Link>
             </div>
-            <div className="flex items-center mr-4 md:mr-8">
-                <ul className="flex items-center space-x-6 md:space-x-10">
-                    {" "}
-                    {/* Reduced spacing */}
+            <div className="flex items-center space-x-6 md:space-x-10">
+                {/* Reduced spacing */}
+                <ul className="flex items-center">
                     <li>
                         <Link href="/search">
                             <p className="hover:text-gray-300 py-2 md:py-3 px-3 md:px-5">
@@ -56,7 +56,7 @@ const Header = () => {
                     </li>
                     <li>
                         <Link href="/dashboard">
-                            <p className="hover:text-gray-300 py-2 md:py-3 px-3 md:px-5">
+                            <p className="hover:text-gray-300 py-2 md:py-3 px-3 mr-5 md:px-5">
                                 Dashboard
                             </p>
                         </Link>

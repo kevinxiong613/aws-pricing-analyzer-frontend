@@ -4,7 +4,7 @@ import "../app/styles/globals.css";
 import Image from "next/image";
 import { getRecipes } from "@/api/gemini";
 
-export default function Dashboard() {
+export default function Search() {
     const [prompt, setPrompt] = useState([]);
     const [ingredient, setIngredient] = useState("");
     const handleIngredientChange = (event) => {
@@ -36,39 +36,56 @@ export default function Dashboard() {
     // }, []);
     return (
         <div className="flex flex-col items-center mt-20">
-            <div className="mb-6">
-                <input
-                    type="text"
-                    value={ingredient}
-                    onChange={handleIngredientChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Enter Ingredient"
-                    className="px-4 py-2 mr-10 border border-gray-300 rounded-lg"
-                />
-                <button
-                    onClick={handleIngredientAdd}
-                    className="px-4 py-2 bg-customText text-white rounded-lg hover:bg-blue-600"
-                >
-                    Add
-                </button>
-            </div>
-            <div className="flex justify-center w-full mt-8">
-                <div className="w-1/4 p-4">
-                    <h2 className="text-2xl font-bold mb-4">Current Ingredients:</h2>
-                    <ul className="list-disc ml-8">
-                        {prompt.map((ingredient, index) => (
-                            <li key={index} className="text-lg">
-                                {ingredient}
-                            </li>
-                        ))}
-                    </ul>
+            {/* Search bar */}
+            <div className="mb-6 border-b border-gray-300 pb-4 w-full md:w-3/4">
+                <div className="flex items-center justify-center">
+                    <input
+                        type="text"
+                        value={ingredient}
+                        onChange={handleIngredientChange}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Enter Ingredient"
+                        className="px-4 py-2 mr-4 border border-gray-300 rounded-lg w-2/3"
+                    />
+                    <button
+                        onClick={handleIngredientAdd}
+                        className="px-4 py-2 bg-customText text-white rounded-lg hover:bg-blue-600"
+                    >
+                        Add
+                    </button>
                 </div>
-                <div className="w-3/4 p-4">
+            </div>
+            {/* Ingredients and Description */}
+            <div className="flex w-full md:w-3/4 mt-8">
+                {/* Ingredient List */}
+                <div className="w-1/4 p-4 border border-gray-300 rounded-lg mr-4">
+                    <h2 className="text-2xl font-bold mb-4">Ingredients:</h2>
+                    <div className="h-64 overflow-y-auto">
+                        <ul className="list-disc ml-8">
+                            {prompt.map((ingredient, index) => (
+                                <li key={index} className="text-lg">
+                                    {ingredient}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+                {/* Description */}
+                <div className="w-3/4 p-4 border border-gray-300 rounded-lg">
                     <p>
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus
                         repellendus aut repellat ut exercitationem aliquid corporis eius
                         nam quo eveniet, qui et ex commodi ducimus est quam obcaecati
-                        nesciunt nemo?
+                        nesciunt nemo? Lorem ipsum, dolor sit amet consectetur adipisicing
+                        elit. Minus repellendus aut repellat ut exercitationem aliquid
+                        corporis eius nam quo eveniet, qui et ex commodi ducimus est quam
+                        obcaecati nesciunt nemo? Lorem ipsum, dolor sit amet consectetur
+                        adipisicing elit. Minus repellendus aut repellat ut exercitationem
+                        aliquid corporis eius nam quo eveniet, qui et ex commodi ducimus
+                        est quam obcaecati nesciunt nemo? Lorem ipsum, dolor sit amet
+                        consectetur adipisicing elit. Minus repellendus aut repellat ut
+                        exercitationem aliquid corporis eius nam quo eveniet, qui et ex
+                        commodi ducimus est quam obcaecati nesciunt nemo?
                     </p>
                 </div>
             </div>
