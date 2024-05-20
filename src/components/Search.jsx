@@ -16,6 +16,11 @@ export default function Dashboard() {
             setIngredient(""); // Turn ingredient back to how it used to be
         }
     };
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            handleIngredientAdd(event);
+        }
+    };
     // useEffect(() => {
     //     const getRecipe = async () => {
     //         try {
@@ -36,6 +41,7 @@ export default function Dashboard() {
                     type="text"
                     value={ingredient}
                     onChange={handleIngredientChange}
+                    onKeyDown={handleKeyDown}
                     placeholder="Enter Ingredient"
                     className="px-4 py-2 mr-10 border border-gray-300 rounded-lg"
                 />
