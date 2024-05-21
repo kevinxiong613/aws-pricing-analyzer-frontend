@@ -87,7 +87,7 @@ export default function SignUp() {
                     </div>
                     <div className="mb-15 text-xl p-5">
                         <button
-                            className="bg-customButton py-2 px-40 font-bold text-white text-xl rounded-lg"
+                            className="bg-customBlue py-2 px-40 font-bold text-white text-xl rounded-lg"
                             type="submit"
                         >
                             Sign Up

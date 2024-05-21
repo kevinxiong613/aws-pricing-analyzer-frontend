@@ -38,7 +38,7 @@ const Header = () => {
                             height="50"
                             alt="Logo"
                         />
-                        <h1 className="text-4xl md:text-4xl text-customText font-medium font-newsreader mt-2">
+                        <h1 className="text-4xl md:text-4xl text-customBlue font-medium font-newsreader mt-2">
                             Munchka
                         </h1>
                     </div>
@@ -64,7 +64,7 @@ const Header = () => {
                     {token ? (
                         <li>
                             <Link href="/" onClick={handleLogout}>
-                                <p className="bg-customButton text-white py-2 px-4 font-bold rounded hover:bg-blue-700 transition-colors text-center cursor-pointer">
+                                <p className="bg-customBlue text-white py-2 px-4 font-bold rounded hover:bg-blue-700 transition-colors text-center cursor-pointer">
                                     Logout
                                 </p>
                             </Link>
@@ -72,7 +72,7 @@ const Header = () => {
                     ) : (
                         <li>
                             <Link href="/login">
-                                <p className="bg-customButton text-white py-2 px-4 font-bold rounded hover:bg-blue-700 transition-colors text-center">
+                                <p className="bg-customBlue text-white py-2 px-4 font-bold rounded hover:bg-blue-700 transition-colors text-center">
                                     Login
                                 </p>
                             </Link>

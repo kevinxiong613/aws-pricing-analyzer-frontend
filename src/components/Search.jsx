@@ -1,18 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "../app/styles/globals.css";
-import Image from "next/image";
-import { getRecipes } from "@/api/gemini";
+import { GoAlert } from "react-icons/go";
+import { verifyIngredients } from "@/api/gemini";
+import { toast, ToastContainer } from "react-toastify"; // Toasts to indicate if something is wrong
+import "react-toastify/dist/ReactToastify.css";
+import { GoCheckCircle } from "react-icons/go";
 
 export default function Search() {
-    const [prompt, setPrompt] = useState([]);
+    const [badIngredientList, setBadIngredientList] = useState([]);
+    const [goodIngredientList, setGoodIngredientList] = useState([]);
     const [ingredient, setIngredient] = useState("");
     const handleIngredientChange = (event) => {
         setIngredient(event.target.value);
     };
     const handleIngredientAdd = (event) => {
+        event.preventDefault();
         if (ingredient.length > 3) {
-            setPrompt([...prompt, ingredient]); // Add ingredient to prompt array
+            setBadIngredientList([...badIngredientList, ingredient]); // Add ingredient to prompt array
             setIngredient(""); // Turn ingredient back to how it used to be
         }
     };
@@ -21,22 +26,48 @@ export default function Search() {
             handleIngredientAdd(event);
         }
     };
-    // useEffect(() => {
-    //     const getRecipe = async () => {
-    //         try {
-    //             const prompt =
-    //                 "I have 1/4 cups of chicken, 1/2 cups of soy sauce, and a box of pasta. Give me 3 recipes with specific ingredient measurements and detailed instructions with heat and time ranges to use these ingredients. Include the ingredients I mentioned in the recipe list.";
-    //             const recipe = await getRecipes(prompt);
-    //             console.log(recipe);
-    //         } catch (error) {
-    //             console.error(error.message);
-    //         }
-    //     };
-    //     getRecipe();
-    // }, []);
+    const handleVerify = async (event) => {
+        event.preventDefault(); // Add this line to prevent it from doing it twice due to it automatically just reloading by default
+        const verify = async () => {
+            try {
+                const ingredientString = badIngredientList.join(", "); // Turn the ingredients into a string to verify
+
+                const prompt = `Tell me which of these ingredients are not meant for cooking: ${ingredientString}. Remember that cooking equipment isn't meant for cooking. Give me a response with the ingredients separated by a comma and don't say anything else`;
+                console.log("PROMPT: " + prompt);
+                const ingredients = await verifyIngredients(prompt);
+
+                const blacklist = ingredients["text"].split(", "); // Turn the ingredients string back into a list of ingredients
+                const blackset = new Set(blacklist); // Turn it into a set
+
+                const newBadList = [];
+                const newGoodList = goodIngredientList;
+                for (var i = 0; i < badIngredientList.length; i++) {
+                    if (!blackset.has(badIngredientList[i])) {
+                        // This is a good ingredient that's okay to use
+                        newGoodList.push(badIngredientList[i]);
+                        console.log("fine");
+                    } else {
+                        newBadList.push(badIngredientList[i]);
+                    }
+                    console.log(newGoodList);
+                    console.log(newBadList);
+                }
+                setGoodIngredientList(newGoodList);
+                setBadIngredientList(newBadList); // Set the bad ingredient list again
+            } catch (error) {
+                toast.error("Could not verify ingredients at this time.", {
+                    position: "bottom-right",
+                });
+                console.error(error.message);
+            }
+        };
+        verify();
+    };
+
     return (
         <div className="flex flex-col items-center mt-20">
             {/* Search bar */}
+            <ToastContainer />
             <div className="mb-6 border-b border-gray-300 pb-4 w-full md:w-3/4">
                 <div className="flex items-center justify-center">
                     <input
@@ -49,7 +80,7 @@ export default function Search() {
                     />
                     <button
                         onClick={handleIngredientAdd}
-                        className="px-4 py-2 bg-customText text-white rounded-lg hover:bg-blue-600"
+                        className="px-4 py-2 bg-customBlue text-white rounded-lg hover:bg-customLightBlue"
                     >
                         Add
                     </button>
@@ -60,15 +91,29 @@ export default function Search() {
                 {/* Ingredient List */}
                 <div className="w-1/4 p-4 border border-gray-300 rounded-lg mr-4">
                     <h2 className="text-2xl font-bold mb-4">Ingredients:</h2>
-                    <div className="h-64 overflow-y-auto">
-                        <ul className="list-disc ml-8">
-                            {prompt.map((ingredient, index) => (
-                                <li key={index} className="text-lg">
+                    <div className="h-80 overflow-y-auto">
+                        <ul className="list-disc">
+                            {goodIngredientList.map((ingredient, index) => (
+                                <li key={index} className="text-lg flex items-center">
+                                    <GoCheckCircle color="green" className="mr-3" />
+                                    {ingredient}
+                                </li>
+                            ))}
+                            {badIngredientList.map((ingredient, index) => (
+                                <li key={index} className="text-lg flex items-center">
+                                    <GoAlert color="red" className="mr-3" />
                                     {ingredient}
                                 </li>
                             ))}
                         </ul>
                     </div>
+                    <button
+                        className="bg-customGreen py-2 px-4 font-bold text-white text-xl rounded-lg hover:bg-customLightGreen"
+                        type="submit"
+                        onClick={handleVerify}
+                    >
+                        Verify
+                    </button>
                 </div>
                 {/* Description */}
                 <div className="w-3/4 p-4 border border-gray-300 rounded-lg">
