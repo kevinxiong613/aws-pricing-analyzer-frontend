@@ -29,7 +29,7 @@ export default function SignUp() {
             // Redirect to the dashboard route
             router.push("/dashboard");
         } catch (error) {
-            toast.error(error.message, { position: "bottom-right" });
+            toast.error(error.response.data, { position: "bottom-right" });
             console.log(error.message);
         }
     };

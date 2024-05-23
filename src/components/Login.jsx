@@ -27,8 +27,8 @@ export default function Login() {
             // Redirect to the dashboard route
             router.push("/dashboard");
         } catch (error) {
-            toast.error(error.message, { position: "bottom-right" });
-            console.log(error.message);
+            toast.error(error.response.data, { position: "bottom-right" });
+            console.log(error.response.data);
         }
     };
 

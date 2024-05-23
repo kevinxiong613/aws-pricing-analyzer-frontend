@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "../app/styles/globals.css";
 import { GoAlert } from "react-icons/go";
 import { verifyIngredients } from "@/api/gemini";
+import { getRecipe } from "@/api/gemini";
 import { toast, ToastContainer } from "react-toastify"; // Toasts to indicate if something is wrong
 import "react-toastify/dist/ReactToastify.css";
 import { GoCheckCircle } from "react-icons/go";
@@ -13,6 +14,10 @@ export default function Search() {
     const [goodIngredientList, setGoodIngredientList] = useState([]); // The verified ingredients
     const [ingredient, setIngredient] = useState(""); // Used to keep track of the ingredient in the search bar
     const [loading, setLoading] = useState(false); // Loading state for API calls
+
+    const [title, setTitle] = useState([]);
+    const [instructions, setInstructions] = useState([]);
+    const [displayIngredients, setDisplayIngredients] = useState([]);
 
     const handleIngredientChange = (event) => {
         // When the search bar value changes
@@ -35,14 +40,11 @@ export default function Search() {
     };
     const handleVerify = async (event) => {
         event.preventDefault(); // Add this line to prevent it from doing it twice due to it automatically just reloading by default
-
         const verify = async () => {
             try {
                 const ingredientString = badIngredientList.join(", "); // Turn the ingredients into a string to verify
 
-                const prompt = `DONT CONSIDER ANY PREVIOUS RESPONSES FOR THIS. Tell me which of these ingredients are NOT consumable foods: ${ingredientString}. Give me a response with the ingredients separated by a comma and don't say anything else.`; // This is the prompt that happened to work best at identifying which are not allowed to be cooked. Gives response back as string seperating the bad ingredients with commas
-
-                const ingredients = await verifyIngredients(prompt); // Call my Express.js route, didn't directly call Gemini here to not worry about exposing API key
+                const ingredients = await verifyIngredients(ingredientString); // Call my Express.js route, didn't directly call Gemini here to not worry about exposing API key
 
                 const blacklist = ingredients["text"].split(", "); // Turn the ingredients string back into a list of ingredients
                 const blackset = new Set(blacklist); // Turn it into a set
@@ -54,7 +56,6 @@ export default function Search() {
                         // If an ingredient from the badIngredientList is not in the ingredients Gemini gave, it's safe
                         // This is a good ingredient that's okay to use
                         newGoodList.push(badIngredientList[i]);
-                        console.log("fine");
                     } else {
                         // Otherwise it's not suitable to eat
                         newBadList.push(badIngredientList[i]);
@@ -66,10 +67,8 @@ export default function Search() {
                 setBadIngredientList(newBadList); // Set the bad ingredient list again
             } catch (error) {
                 // If something goes wrong let the user know
-                toast.error("Could not verify ingredients at this time.", {
-                    position: "bottom-right",
-                });
-                console.error(error.message);
+                toast.error(error.response.data, { position: "bottom-right" });
+                console.error(error.response.data);
             } finally {
                 setLoading(false); // Disable loading circle no matter what happens so we can see the ingredients again
             }
@@ -77,6 +76,30 @@ export default function Search() {
         if (badIngredientList.length > 0) {
             setLoading(true); // Set this to true to make the add button and verify button unclickable, and also add a loading circle
             verify(); // Only do this if there are ingredients to check
+        }
+    };
+
+    const handleGetRecipe = async (event) => {
+        event.preventDefault(); // Prevent from occuring twice
+        const recipes = async () => {
+            try {
+                const ingredientString = goodIngredientList.join(", "); // Join the good list for getting recipes
+                console.log("entered getRecipe");
+                const recipe = await getRecipe(ingredientString);
+                setDisplayIngredients(recipe["ingredients"]); // Set the display ingredients and the instructions like so
+                setInstructions(recipe["instructions"]);
+                setTitle(recipe["title"]);
+            } catch (error) {
+                toast.error(error.response.data, { position: "bottom-right" });
+                console.error(error.response.data);
+            } finally {
+                setLoading(false); // Make sure the loading is set back to false at the end
+            }
+        };
+        if (goodIngredientList.length >= 1 || badIngredientList.length == 0) {
+            // Don't call this without these being true
+            setLoading(true);
+            recipes();
         }
     };
 
@@ -108,21 +131,23 @@ export default function Search() {
                 </div>
             </div>
             {/* ---------- INGREDIENTS AND DESCRIPTION ---------- */}
-            <div className="flex w-full md:w-3/4 mt-8">
+            <div className="flex w-full md:w-3/4 mt-8 bg-white">
                 {/* ---------- INGREDIENTS BOX ---------- */}
-                <div className="w-1/4 p-4 border border-gray-300 rounded-lg mr-4">
-                    <h2 className="text-2xl font-bold mb-4">Ingredients:</h2>
+                <div className="w-1/4 p-4 border border-gray-300 rounded-lg shadow-lg mr-4 bg-white">
+                    <h2 className="text-2xl font-bold text-gray-700 mb-2">
+                        Possible Ingredients:
+                    </h2>
                     {loading ? ( // Need this, kind of ugly but want a loading circle if this is the case
-                        <div className="flex justify-center items-center h-80 overflow-y-auto mb-5">
+                        <div className="flex justify-center items-center h-96 overflow-y-auto mb-5">
                             <Circles color="#00BFFF" height={80} width={80} />
                         </div>
                     ) : (
-                        <div className="h-80 overflow-y-auto mb-5">
+                        <div className="h-96 overflow-y-auto mb-5">
                             <ul className="list-disc">
                                 {goodIngredientList.map((ingredient, index) => (
                                     <li
                                         key={index} // Map the ingredients into a list to be displayed
-                                        className="text-lg flex items-center"
+                                        className="text-lg text-gray-600 flex items-center mb-1"
                                     >
                                         <GoCheckCircle // Use circle icons for good ingredients that have been verified
                                             color="green"
@@ -164,7 +189,7 @@ export default function Search() {
                                     : "bg-customGreen hover:bg-customLightGreen"
                             }`}
                             type="submit"
-                            onClick={handleVerify}
+                            onClick={handleGetRecipe}
                             disabled={
                                 loading ||
                                 badIngredientList.length > 0 ||
@@ -175,24 +200,66 @@ export default function Search() {
                         </button>
                     </div>
                 </div>
-                {/* ---------- RECIPE DESCRIPTION ---------- */}
-                <div className="w-3/4 p-4 border border-gray-300 rounded-lg">
-                    <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus
-                        repellendus aut repellat ut exercitationem aliquid corporis eius
-                        nam quo eveniet, qui et ex commodi ducimus est quam obcaecati
-                        nesciunt nemo? Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Minus repellendus aut repellat ut exercitationem aliquid
-                        corporis eius nam quo eveniet, qui et ex commodi ducimus est quam
-                        obcaecati nesciunt nemo? Lorem ipsum, dolor sit amet consectetur
-                        adipisicing elit. Minus repellendus aut repellat ut exercitationem
-                        aliquid corporis eius nam quo eveniet, qui et ex commodi ducimus
-                        est quam obcaecati nesciunt nemo? Lorem ipsum, dolor sit amet
-                        consectetur adipisicing elit. Minus repellendus aut repellat ut
-                        exercitationem aliquid corporis eius nam quo eveniet, qui et ex
-                        commodi ducimus est quam obcaecati nesciunt nemo?
-                    </p>
-                </div>
+                {instructions.length < 1 ? (
+                    // ---------- TEMPORRAY INSTRUCTION BEFORE RECIPE IS GENERATED ----------
+                    <div className="center w-3/4 p-4 border border-gray-300 rounded-lg shadow-lg bg-white text-3xl font-bold">
+                        Please create a list of verified ingredients to generate a recipe
+                    </div>
+                ) : (
+                    // ---------- RECIPE AND INGREDIENTS AND INSTRUCTIONS ----------
+                    <div className="w-3/4 p-4 border border-gray-300 rounded-lg shadow-lg bg-white">
+                        <h1 className="text-2xl font-bold text-gray-700 mb-2">{title}</h1>
+                        <div className="h-96 overflow-y-auto mb-5">
+                            <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                                Ingredients:
+                            </h2>
+                            <ul className="list-disc list-inside mb-4">
+                                {displayIngredients.map(
+                                    // Map the ingredients to an unordered list
+                                    (ingredient, index) => (
+                                        <li
+                                            key={index}
+                                            className="text-lg text-gray-600 flex items-center mb-1"
+                                        >
+                                            {ingredient}
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                            <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                                Steps:
+                            </h2>
+                            <ul className="list-decimal list-inside">
+                                {instructions.map(
+                                    // Map the instructions to an ordered list
+                                    (instruction, index) => (
+                                        <li
+                                            key={index}
+                                            className="text-lg text-gray-600 flex items-center mb-1"
+                                        >
+                                            {instruction}
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                        <button // Verification button to verify again
+                            className={`py-2 px-4 font-bold text-white text-xl rounded-lg ${
+                                loading || instructions.length < 1 // If any of these conditions are true don't let them click it
+                                    ? "bg-loading"
+                                    : "bg-customBlue hover:bg-customLightBlue"
+                            }`}
+                            type="submit"
+                            onClick={handleGetRecipe}
+                            disabled={
+                                loading || instructions.length < 1 // Don't allow click if it's either 1. disabled or 2. nothing has been generated yet
+                            } // Disable button when loading, or if there are still bad ingredients, or there are no good ingredients
+                        >
+                            Save Recipe
+                        </button>
+                    </div>
+                )}
+                ;
             </div>
         </div>
     );
