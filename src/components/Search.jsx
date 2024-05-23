@@ -85,7 +85,6 @@ export default function Search() {
         const recipes = async () => {
             try {
                 const ingredientString = goodIngredientList.join(", "); // Join the good list for getting recipes
-                console.log("entered getRecipe");
                 const recipe = await getRecipe(ingredientString);
                 setDisplayIngredients(recipe["ingredients"]); // Set the display ingredients and the instructions like so
                 setInstructions(recipe["instructions"]);
@@ -115,6 +114,7 @@ export default function Search() {
                     user_id: localStorage.getItem("user_id"),
                 };
                 const recipe = await saveRecipe(recipeObj);
+                toast.success("Recipe saved successfully!", { position: "bottom-right" });
             } catch (error) {
                 toast.error(error.response.data, { position: "bottom-right" });
                 console.error(error.response.data);
@@ -233,13 +233,13 @@ export default function Search() {
                             <h2 className="text-xl font-semibold text-gray-700 mb-2">
                                 Ingredients:
                             </h2>
-                            <ul className="list-disc list-inside mb-4">
+                            <ul className="ml-5 mb-4 list-disc list-inside">
                                 {displayIngredients.map(
                                     // Map the ingredients to an unordered list
                                     (ingredient, index) => (
                                         <li
                                             key={index}
-                                            className="text-lg text-gray-600 flex items-center mb-1"
+                                            className="text-lg text-gray-600 mb-4"
                                         >
                                             {ingredient}
                                         </li>
@@ -249,19 +249,19 @@ export default function Search() {
                             <h2 className="text-xl font-semibold text-gray-700 mb-2">
                                 Steps:
                             </h2>
-                            <ul className="list-decimal list-inside">
+                            <ol className="ml-5 list-decimal list-inside">
                                 {instructions.map(
                                     // Map the instructions to an ordered list
                                     (instruction, index) => (
                                         <li
                                             key={index}
-                                            className="text-lg text-gray-600 flex items-center mb-1"
+                                            className="text-lg text-gray-600 mb-4"
                                         >
                                             {instruction}
                                         </li>
                                     )
                                 )}
-                            </ul>
+                            </ol>
                         </div>
                         <button // Verification button to verify again
                             className={`py-2 px-4 font-bold text-white text-xl rounded-lg ${
@@ -279,7 +279,6 @@ export default function Search() {
                         </button>
                     </div>
                 )}
-                ;
             </div>
         </div>
     );
