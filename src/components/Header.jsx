@@ -21,6 +21,7 @@ const Header = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("token"); // Remove from local storage to be null
+        localStorage.removeItem("user_id");
         setToken(null);
     };
 

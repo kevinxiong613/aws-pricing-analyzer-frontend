@@ -103,6 +103,14 @@ export default function Search() {
         }
     };
 
+    const handleSaveRecipe = async (event) => {
+        event.preventDefault();
+        const recipes = async () => {
+            try {
+            } catch (error) {}
+        };
+    };
+
     return (
         <div className="flex flex-col items-center mt-20">
             {/* ---------- SEARCH BAR ---------- */}

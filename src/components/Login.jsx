@@ -22,8 +22,10 @@ export default function Login() {
             };
             const result = await login(userInfo);
             const token = result.token;
+            const user_id = result.user_id;
             toast.success("Logged in succesfully!", { position: "bottom-right" }); // Make the toast notification messages appear on the bottom right
             localStorage.setItem("token", token); // Set the local storage to contain the token
+            localStorage.setItem("userId", user_id);
             // Redirect to the dashboard route
             router.push("/dashboard");
         } catch (error) {
