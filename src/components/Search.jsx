@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify"; // Toasts to indicate if
 import "react-toastify/dist/ReactToastify.css";
 import { GoCheckCircle } from "react-icons/go";
 import { Circles } from "react-loader-spinner";
+import { saveRecipe } from "@/api/recipe";
 
 export default function Search() {
     const [badIngredientList, setBadIngredientList] = useState([]); // The unverified ingredients, which includes when you just add it
@@ -107,8 +108,19 @@ export default function Search() {
         event.preventDefault();
         const recipes = async () => {
             try {
-            } catch (error) {}
+                const recipeObj = {
+                    title: title,
+                    ingredients: displayIngredients,
+                    instructions: instructions,
+                    user_id: localStorage.getItem("user_id"),
+                };
+                const recipe = await saveRecipe(recipeObj);
+            } catch (error) {
+                toast.error(error.response.data, { position: "bottom-right" });
+                console.error(error.response.data);
+            }
         };
+        recipes();
     };
 
     return (
@@ -258,7 +270,7 @@ export default function Search() {
                                     : "bg-customBlue hover:bg-customLightBlue"
                             }`}
                             type="submit"
-                            onClick={handleGetRecipe}
+                            onClick={handleSaveRecipe}
                             disabled={
                                 loading || instructions.length < 1 // Don't allow click if it's either 1. disabled or 2. nothing has been generated yet
                             } // Disable button when loading, or if there are still bad ingredients, or there are no good ingredients

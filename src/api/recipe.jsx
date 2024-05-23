@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const saveRecipe = async (body) => {
     const response = await axios.post(
-        "http://localhost:5001/generate/verifyIngredients",
+        "http://localhost:5001/recipes/saveRecipe",
         body, // Pass in the body with the title, ingredients, instructions, and user_email in
         {
             headers: {

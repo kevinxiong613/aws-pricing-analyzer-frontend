@@ -22,10 +22,13 @@ export default function SignUp() {
                 password: password,
             };
             const result = await signup(userInfo);
-            console.log(result);
             const token = result.token;
+            const user_id = result.user_id;
+
+            console.log(user_id);
             toast.success("Signed up succesfully!", { position: "bottom-right" }); // Make the toast notification messages appear on the bottom right
             localStorage.setItem("token", token); // Set the local storage to contain the token
+            localStorage.setItem("user_id", user_id);
             // Redirect to the dashboard route
             router.push("/dashboard");
         } catch (error) {
