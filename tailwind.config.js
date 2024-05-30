@@ -24,6 +24,8 @@ module.exports = {
                 customLightBlue: "#4d97b7",
                 customGreen: "#458601",
                 customLightGreen: "#73b400",
+                customRed: "#dd1122",
+                customLightRed: "#e75864",
                 loading: "#626262",
             },
         },

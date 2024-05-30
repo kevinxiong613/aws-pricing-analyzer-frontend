@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../app/styles/globals.css";
 import Image from "next/image";
 import { getUserRecipes } from "@/api/recipe";
+import GestureControl from "./GestureControl";
 
 export default function Dashboard() {
     const [recipes, setRecipes] = useState([]);
@@ -73,6 +74,9 @@ export default function Dashboard() {
             ) : (
                 <>
                     <div className="flex flex-col items-center">
+                        <div>
+                            <GestureControl />
+                        </div>
                         <h1 className="text-4xl font-bold text-gray-700 mb-4 pt-20">
                             {currRecipe.title}
                         </h1>
@@ -89,7 +93,7 @@ export default function Dashboard() {
                         <h2 className="text-2xl font-bold text-gray-700 mb-2">
                             Instructions:
                         </h2>
-                        <ol className="list-decimal list-inside text-lg text-gray-800">
+                        <ol className="list-decimal list-inside text-lg text-gray-800 w-1/2">
                             {currRecipe.instructions.map((instruction, index) => (
                                 <li key={index} className="mb-2 px-4">
                                     {instruction}
@@ -97,7 +101,7 @@ export default function Dashboard() {
                             ))}
                         </ol>
                         <button // Verification button to verify again
-                            className="py-2 px-4 font-bold text-white bg-customBlue text-xl rounded-lg"
+                            className="py-2 px-4 font-bold text-white bg-customRed hover:bg-customLightRed text-xl rounded-lg"
                             type="submit"
                             onClick={handleBack}
                         >
